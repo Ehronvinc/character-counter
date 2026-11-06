@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>CharWord Counter</title>
+  </head>
+  <body>
+    <form id="word-counter-form">
+      <div class="form-control">
+        <label for="paragraph-input" id="paragraph-label"
+          >This is a Word/Character Counter</label
+        >
+        <textarea name="paragraph" id="paragraph-input"></textarea>
+      </div>
+    </form>
+    <div class="counter-control">
+      <p class="hidden" id="warning"></p>
+    </div>
+    <div class="buttons-container">
+      <button class="clear-btn">Clear</button>
+      <button class="upper-btn">Uppercase</button>
+      <button class="lower-btn">Lowercase</button>
+    </div>
+
+    <script src="main.js"></script>
+  </body>
+</html>
