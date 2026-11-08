@@ -3,17 +3,16 @@ const counterControl = document.querySelector(".counter-control");
 const clearBtn = document.querySelector(".clear-btn");
 const upperBtn = document.querySelector(".upper-btn");
 const lowerBtn = document.querySelector(".lower-btn");
+const charCounting = createCharCounter();
+const wordCounting = createWordCounter();
 
 function createCharCounter() {
   const charCountEl = document.createElement("p");
-  const wordCounting = createWordCounter();
 
   charCountEl.classList.add("char-counter-text");
   charCountEl.textContent = `Characters: `;
 
-  counterControl.appendChild(charCountEl);
-  counterControl.appendChild(wordCounting);
-  checker(charCountEl, wordCounting);
+  return charCountEl;
 }
 
 function createWordCounter() {
@@ -25,70 +24,73 @@ function createWordCounter() {
   return wordCountEl;
 }
 
-function checker(char, word) {
-  textArea.addEventListener("input", () => {
-    const characCounter = textArea.value.length;
-    const wordacCounter =
-      textArea.value.trim() === "" ? 0 : textArea.value.split(/\s+/).length;
-    warn(wordacCounter);
-    clearAll(char, word);
+function displayCounters() {
+  counterControl.appendChild(charCounting);
+  counterControl.appendChild(wordCounting);
+}
 
-    char.textContent = `Characters: ${characCounter}`;
-    word.textContent = `Words: ${wordacCounter}/200`;
-  });
+function checker(char, word) {
+  const characCounter = textArea.value.length;
+  const wordacCounter =
+    textArea.value.trim() === "" ? 0 : textArea.value.split(/\s+/).length;
+
+  warn(wordacCounter);
+
+  char.textContent = `Characters: ${characCounter}`;
+  word.textContent = `Words: ${wordacCounter}/200`;
 }
 
 function warn(words) {
   const warnMsg = document.getElementById("warning");
   warnMsg.classList.replace("hidden", "warn-msg");
+
   if (words === 100) {
-    warnMsg.textContent = `Warning! 100 words left`;
+    warnMsg.textContent = `Warning! 100 words used`;
     textArea.style.outline = "1px solid red";
     setTimeout(() => {
       warnMsg.textContent = "";
       textArea.style.outline = "1px solid #05c105";
     }, 4000);
   }
-  if (words > 200) {
+
+  if (words === 200) {
     textArea.disabled = true;
     warnMsg.textContent = "Limit Reached!";
     setTimeout(() => {
       warnMsg.textContent = "";
-    }, 4000);
+    }, 3000);
   }
 }
 
 function focusArea() {
   textArea.style.outline = "1px solid #05c105";
+  displayCounters();
 }
 
 function blurArea() {
   textArea.style.outline = "none";
 }
 
-function clearAll(chars, words) {
-  clearBtn.addEventListener("click", () => {
-    textArea.value = "";
-    textArea.disabled = false;
-    chars.textContent = `Characters: 0`;
-    words.textContent = `Words: 0/200`;
-  });
+function clearAll() {
+  textArea.value = "";
+  textArea.disabled = false;
+  checker(charCounting, wordCounting);
 }
 
 function upperCase() {
-  upperBtn.addEventListener("click", () => {
-    textArea.value = textArea.value.toUpperCase();
-  });
+  textArea.value = textArea.value.toUpperCase();
 }
 
 function lowerCase() {
-  lowerBtn.addEventListener("click", () => {
-    textArea.value = textArea.value.toLowerCase();
-  });
+  textArea.value = textArea.value.toLowerCase();
 }
 
-createCharCounter();
-upperCase();
-lowerCase();
+// Event listeners insertions
+textArea.addEventListener("input", () => {
+  checker(charCounting, wordCounting);
+});
+upperBtn.addEventListener("click", upperCase);
+lowerBtn.addEventListener("click", lowerCase);
 textArea.addEventListener("focus", focusArea);
 textArea.addEventListener("blur", blurArea);
+clearBtn.addEventListener("click", clearAll);
